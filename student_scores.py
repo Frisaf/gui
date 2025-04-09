@@ -21,6 +21,11 @@ def submit_tests():
         global tests, student_btn
 
         tests = int(text_input.get())
+
+        if tests < 1 or tests > 10:
+            error_msg.config(text="The number of tests cannot be below 1 or exceed 10.")
+            return
+        
         Label(root, text=f"{tests} tests").grid(row=1)
         student_btn = Button(root, text="Submit", command=submit_students)
         student_btn.grid(row=0, column=2)
@@ -33,6 +38,7 @@ def submit_tests():
 
 def submit_students():
     student_btn.grid_forget()
+    error_msg.config(text="")
 
     global student_name
 
@@ -48,14 +54,14 @@ def submit_students():
         student_scores.append([])
         student_scores[count].append(student_name)
         score_input = Entry(root)
-        score_input.grid(row=3, column=2)
+        score_input.grid(row=3, column=1)
 
         score_prompt = Label(root, text=f"Enter the student's scores one by one.\n{student_name}'s score")
         score_btn = Button(root, text="Submit", command=submit_scores)
         print(score_btn.grid_info())
 
-        score_prompt.grid(row=3)
-        score_btn.grid(row=3, column=3)
+        score_prompt.grid(row=3, column=0)
+        score_btn.grid(row=3, column=2)
 
 def submit_scores():
     global count
@@ -71,6 +77,7 @@ def submit_scores():
     if len(scores) == tests:
         score_prompt.grid_forget()
         score_btn.grid_forget()
+        score_input.grid_forget()
         student_btn.grid(row=0, column=2)
         
         for i in range(len(scores)):
@@ -82,6 +89,10 @@ def submit_scores():
 
 def calculate():
     r = 0
+
+    error_msg.config(text="")
+    prompt.grid_forget()
+    text_input.grid_forget()
 
     for item in student_scores:
         for x in item:
